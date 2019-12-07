@@ -1,6 +1,6 @@
     MIT License
 
-    Copyright (c) Microsoft Corporation. All rights reserved.
+    Copyright (c) Andrew Fehr. All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,6 @@
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
+
+
+The [Gentoo icon](https://www.iconfinder.com/icons/386465/gentoo_icon) used was made by [Aha-Soft](https://www.iconfinder.com/aha-soft) and is licensed under [CC 3.0](https://creativecommons.org/licenses/by/3.0/)
