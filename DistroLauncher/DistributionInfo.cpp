@@ -9,7 +9,7 @@ bool DistributionInfo::CreateUser(std::wstring_view userName)
 {
     // Create the user account.
     DWORD exitCode;
-    std::wstring commandLine = L"/usr/sbin/adduser --quiet --gecos '' ";
+    std::wstring commandLine = L"/usr/sbin/useradd -m ";
     commandLine += userName;
     HRESULT hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
     if ((FAILED(hr)) || (exitCode != 0)) {
@@ -17,19 +17,42 @@ bool DistributionInfo::CreateUser(std::wstring_view userName)
     }
 
     // Add the user account to any relevant groups.
-    commandLine = L"/usr/sbin/usermod -aG adm,cdrom,sudo,dip,plugdev ";
+    commandLine = L"/usr/sbin/usermod -aG adm,audio,cdrom,wheel,portage,usb ";
     commandLine += userName;
     hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
     if ((FAILED(hr)) || (exitCode != 0)) {
 
         // Delete the user if the group add command failed.
-        commandLine = L"/usr/sbin/deluser ";
+        commandLine = L"/usr/sbin/userdel ";
         commandLine += userName;
         g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
         return false;
     }
 
-    return true;
+	// Set the password for the user 
+	commandLine = L"/usr/bin/passwd ";
+	commandLine += userName;
+	hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
+
+	if ((FAILED(hr)) || (exitCode != 0)) {
+
+		return false;
+
+	}
+
+	return true;
+}
+
+bool DistributionInfo::SetRootPassword()
+{
+	DWORD exitCode;
+	std::wstring commandLine = L"/usr/bin/passwd ";
+	commandLine += L"root";
+	HRESULT hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
+	if (FAILED(hr) || exitCode != 0) {
+		return false;
+	}
+	return true;
 }
 
 ULONG DistributionInfo::QueryUid(std::wstring_view userName)
