@@ -26,7 +26,7 @@ jobs:
     - name: Build Appx
       run: |
         dir
-        'build.bat' x64 rel
+        ./build.bat x64 rel
         mkdir Artifacts
         copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.cer Artifacts
         copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.appxbundle Artifacts
