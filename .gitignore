@@ -297,4 +297,3 @@ DistroLauncher/messages.h
 *.exe
 *.tar.gz
 *.bak
-.gitsecret/keys/random_seed
