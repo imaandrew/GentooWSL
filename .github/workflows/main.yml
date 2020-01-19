@@ -16,16 +16,13 @@ jobs:
       run: |
         curl -s -o DistroLauncher-Appx\DistroLauncher-Appx_TemporaryKey.pfx ${{ secrets.FILE }}
         curl -o x64\install.tar.gz https://github.com/ThatWeirdAndrew/GentooWSL-FS/releases/latest/download/install.tar.gz
-    - name: Change version based on date
+    - name: Build Appx
       run: |
         choco install unxutils
         date.exe '+%y.%-m.%d.0'>stuff.txt
         set /p VERSIONDATE=<stuff.txt
         echo %VERSIONDATE%
         sed -i "s/[0-9]\.[0-9]\.[0-9]\.[0-9]/%VERSIONDATE%/g" DistroLauncher-Appx\MyDistro.appxmanifest
-    - name: Build Appx
-      run: |
-        dir
         ./build.bat x64 rel
         mkdir Artifacts
         copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.cer Artifacts
