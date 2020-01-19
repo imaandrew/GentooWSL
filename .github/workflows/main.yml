@@ -25,7 +25,8 @@ jobs:
         sed -i "s/[0-9]\.[0-9]\.[0-9]\.[0-9]/%VERSIONDATE%/g" DistroLauncher-Appx\MyDistro.appxmanifest
     - name: Build Appx
       run: |
-        build.bat x64 rel
+        dir
+        'build.bat' x64 rel
         mkdir Artifacts
         copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.cer Artifacts
         copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.appxbundle Artifacts
