@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: ilammy/msvc-dev-cmd@v1
     - name: Download Files
       run: |
         curl -s -o DistroLauncher-Appx\DistroLauncher-Appx_TemporaryKey.pfx ${{ secrets.FILE }}
