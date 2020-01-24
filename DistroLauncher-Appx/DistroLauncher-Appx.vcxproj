@@ -77,7 +77,7 @@
   <PropertyGroup>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <PackageCertificateThumbprint>F01DD198468B776F74313CC6BB3C9D2C3805DC05</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>58B9ED4755E9605DCFBAA23B7EDF02D223909665</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxBundlePlatforms>x64|arm64</AppxBundlePlatforms>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
