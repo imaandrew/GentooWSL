@@ -1,0 +1,69 @@
+version: 1.0.{build}
+skip_tags: true
+image: Visual Studio 2019 Preview
+environment:
+  FILE:
+    secure: GRSaeSzWKyjaFHXReh8dx19U2gIz6gCT+8huFXd2Akxwh0ZGft6SeFsAAHM/QS7GZbconH9Lz4VvXTOB3N//wwPwoc5CYGIhlpYLsVfDuj9jMXGgFYJS/M5bHPeotwKZ
+  PASSWORD:
+    secure: a4UPiwsKmU/zUH6zsReleHzCXG++ZwWimSoHu2xcjTo=
+install:
+- ps: >-
+    curl.exe  --silent -L --output 'DistroLauncher-Appx\DistroLauncher-Appx_TemporaryKey.pfx' $env:FILE
+
+
+    $PfxFilePath = 'DistroLauncher-Appx\DistroLauncher-Appx_TemporaryKey.pfx'
+
+    $absolutePfxFilePath = Resolve-Path -Path $PfxFilePath
+
+
+    Add-Type -AssemblyName System.Security
+
+    $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+
+    $cert.Import($absolutePfxFilePath, $env:Password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]"PersistKeySet")
+
+    $store = new-object system.security.cryptography.X509Certificates.X509Store -argumentlist "MY", CurrentUser
+
+    $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::"ReadWrite")
+
+    $store.Add($cert)
+
+    $store.Close()
+build_script:
+- cmd: >-
+    dir DistroLauncher-Appx
+
+    curl -L -o x64\install.tar.gz https://github.com/ThatWeirdAndrew/GentooWSL-FS/releases/latest/download/install.tar.gz
+
+    choco install -y unxutils
+
+    date.bat
+
+    cat stuff.txt
+
+    set /p VERSIONDATE=<stuff.txt
+
+    "C:\Program Files\Git\usr\bin\sed.exe" -i "s/[0-9]\.[0-9]\.[0-9]\.[0-9]/%VERSIONDATE%/g" DistroLauncher-Appx\MyDistro.appxmanifest
+
+    build.bat x64 rel
+
+    mkdir Artifacts
+
+    copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.cer Artifacts
+
+    copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.appxbundle Artifacts
+artifacts:
+- path: Artifacts\*.cer
+  name: Certificate
+- path: Artifacts\*.appxbundle
+  name: Appx
+deploy:
+  tag: $(VERSIONDATE)
+  description: 'GentooWSL!'
+  provider: GitHub
+  auth_token:
+    secure: L3wYI3iXpq4EizAnmYB9VaGghyx39zOZtHWK4Ajsc4cvBiqKO0koeEYtun31EnBP
+  artifact: Appx, Certificate
+  on:
+    branch: master                 # release from master branch only
+    APPVEYOR_REPO_TAG: true        # deploy on tag push only
