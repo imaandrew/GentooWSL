@@ -1,4 +1,5 @@
 version: 1.0.{build}
+skip_tags: true
 image: Visual Studio 2019 Preview
 environment:
   FILE:
@@ -65,4 +66,3 @@ deploy:
   artifact: Appx, Certificate
   on:
     branch: master                 # release from master branch only
-    APPVEYOR_REPO_TAG: true        # deploy on tag push only
