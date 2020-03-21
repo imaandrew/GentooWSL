@@ -17,6 +17,8 @@ namespace DistributionInfo
 
     // The title bar for the console window while the distribution is installing.
     const std::wstring WindowTitle = L"Installing GentooWSL";
+	// Set root user password
+	bool SetRootPassword();
 
     // Create and configure a user account.
     bool CreateUser(std::wstring_view userName);

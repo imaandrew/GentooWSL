@@ -89,3 +89,13 @@ Language=English
 The distribution installation has become corrupted.
 Please select Reset from App Settings or uninstall and reinstall the app.
 .
+
+MessageId=1014 SymbolicName=MSG_CREATE_ROOT_PROMPT
+Language=English
+Please create a root account password. This is the account used to perform administrative functions on Linux.
+.
+
+MessageId=1015 SymbolicName=MSG_WELCOME_MSG_PROMPT
+Language=English
+Welcome to GentooWSL.
+.

@@ -36,6 +36,40 @@ HRESULT InstallDistribution(bool createUser)
         return hr;
     }
 
+    // Create /etc/shadow and /etc/gshadow
+    hr = g_wslApi.WslLaunchInteractive(L"/usr/sbin/pwconv ; /usr/sbin/grpconv", true, &exitCode);
+    if (FAILED(hr)) {
+        return hr;
+    }
+
+	// Make /etc/shadow and /etc/gshadow writeable
+	hr = g_wslApi.WslLaunchInteractive(L"chmod 0744 /etc/shadow ; chmod 0744 /etc/gshadow", true, &exitCode);
+	if (FAILED(hr)) {
+		return hr;
+	}
+
+	// Enable su
+	hr = g_wslApi.WslLaunchInteractive(L"chown -R root:root /bin/su ; chmod 755 /bin/su ; chmod u+s /bin/su", true, &exitCode);
+	if (FAILED(hr)) {
+		return hr;
+	}
+
+    // Configure dbus (no longer required as of Fedora 30)
+    // hr = g_wslApi.WslLaunchInteractive(L"dbus-uuidgen --ensure", true, &exitCode);
+	// if (FAILED(hr)) {
+	//	return hr;
+	// }
+
+	// Display welcome
+	Helpers::PrintMessage(MSG_WELCOME_MSG_PROMPT);
+
+	// Set root password
+	// UINT8 count = 0;
+	// Helpers::PrintMessage(MSG_CREATE_ROOT_PROMPT);
+	// while (!DistributionInfo::SetRootPassword()) {
+	//	count++;
+	// }
+
     // Create a user account.
     if (createUser) {
         Helpers::PrintMessage(MSG_CREATE_USER_PROMPT);
