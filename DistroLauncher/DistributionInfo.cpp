@@ -43,18 +43,6 @@ bool DistributionInfo::CreateUser(std::wstring_view userName)
 	return true;
 }
 
-bool DistributionInfo::SetRootPassword()
-{
-	DWORD exitCode;
-	std::wstring commandLine = L"/usr/bin/passwd ";
-	commandLine += L"root";
-	HRESULT hr = g_wslApi.WslLaunchInteractive(commandLine.c_str(), true, &exitCode);
-	if (FAILED(hr) || exitCode != 0) {
-		return false;
-	}
-	return true;
-}
-
 ULONG DistributionInfo::QueryUid(std::wstring_view userName)
 {
     // Create a pipe to read the output of the launched process.
