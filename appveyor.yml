@@ -8,14 +8,10 @@ environment:
     secure: KOz+2qEYja2tlD0D6s0+JddJZ7ATx52COlzIhn3/8Ax+UlaCrOOAytXV/UFuiRbkFc3p5DO2bZf5aOLFmcojrQ==
   pfx_password:
     secure: a4UPiwsKmU/zUH6zsReleHzCXG++ZwWimSoHu2xcjTo=
-  my_variable:
-    secure: Eze4m09uFjWbF9X6pA2SCg==
-  APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrLNsd49KVBaMylZqo6TEV+nP2bXshxlq5QUIXEq2bKuDRj11eZvLNA3NA8zOSqhpdA869qlkiCnXivkEPFehW77uE1TM64+BoPrHH27rcnvzcHw1ypQNH+HxICjoQ+D0X1nsGD44vVScKEvcpXfdHJUqUg3S/UGwEaSHFLjVKG+QiGwXrBFi95O7pSo4PAJYAqBFYt9cPDsK99XY4bBPNVpQe43RP7SoL9v/r/911+Xn2SU3YFGDtgi3BguKOySUjyEmWMfKZ7vbaOLJr8QB2G0gAaqJeyFcjiyBO6sdli84RkMtqiMIpLXg2kYBb1MWjV8x8MK9MnNCmv7elYhcd
 init:
-  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-  - sh: sleep 2m 
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: sleep 120
 install:
-  - cmd: echo %my_variable%
   - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
   - cmd: appveyor-tools\secure-file -decrypt DistroLauncher-Appx\GentooWSL.pfx.enc -secret %pfx_secret% -salt %pfx_salt%
   - ps: $password = ConvertTo-SecureString -String $env:pfx_password -Force -AsPlainText 
