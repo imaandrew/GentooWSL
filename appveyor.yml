@@ -1,62 +1,40 @@
 version: 1.0.{build}
 skip_tags: true
-image: Visual Studio 2019 Preview
+image: Visual Studio 2019
 environment:
-  FILE:
-    secure: GRSaeSzWKyjaFHXReh8dx19U2gIz6gCT+8huFXd2Akxwh0ZGft6SeFsAAHM/QS7GZbconH9Lz4VvXTOB3N//wwPwoc5CYGIhlpYLsVfDuj9jMXGgFYJS/M5bHPeotwKZ
-  PASSWORD:
+  pfx_secret:
+    secure: hdy14L35tr5KSz6ZCuPL9vons7DFlgo0dHo8gWYOkq8=
+  pfx_salt:
+    secure: KOz+2qEYja2tlD0D6s0+JddJZ7ATx52COlzIhn3/8Ax+UlaCrOOAytXV/UFuiRbkFc3p5DO2bZf5aOLFmcojrQ==
+  pfx_password:
     secure: a4UPiwsKmU/zUH6zsReleHzCXG++ZwWimSoHu2xcjTo=
 install:
-- ps: >-
-    curl.exe  --silent -L --output 'DistroLauncher-Appx\DistroLauncher-Appx_TemporaryKey.pfx' $env:FILE
-
-
-    $PfxFilePath = 'DistroLauncher-Appx\DistroLauncher-Appx_TemporaryKey.pfx'
-
-    $absolutePfxFilePath = Resolve-Path -Path $PfxFilePath
-
-
-    Add-Type -AssemblyName System.Security
-
-    $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
-
-    $cert.Import($absolutePfxFilePath, $env:Password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]"PersistKeySet")
-
-    $store = new-object system.security.cryptography.X509Certificates.X509Store -argumentlist "MY", CurrentUser
-
-    $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::"ReadWrite")
-
-    $store.Add($cert)
-
-    $store.Close()
+  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
+  - cmd: appveyor-tools\secure-file -decrypt DistroLauncher-Appx\GentooWSL.pfx.enc -secret %pfx_secret% -salt %pfx_salt%
+  - ps: $password = ConvertTo-SecureString -String $env:pfx_password -Force -AsPlainText 
+  - ps: Import-PfxCertificate -FilePath DistroLauncher-Appx\GentooWSL.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $password
+  
+before_build:
+  - ps: >-
+    Invoke-WebRequest https://github.com/ThatWeirdAndrew/GentooWSL-FS/releases/latest/download/install.tar.gz -OutFile x64\install.tar.gz -UseBasicParsing
+    $version='Version="' + $(Get-Date -Format "yy.MM.dd") + '.0"'
+    $env:VERSIONDATE=$(Get-Date -Format "yy.MM.dd") + '.0'
+    $file_contents = $(Get-Content .\DistroLauncher-Appx\MyDistro.appxmanifest) -replace 'Version="1.1.1.1"', $version
+    $file_contents | Out-File "DistroLauncher-Appx\MyDistro.appxmanifest" -Encoding utf8
+    
 build_script:
-- cmd: >-
-    dir DistroLauncher-Appx
-
-    curl -L -o x64\install.tar.gz https://github.com/ThatWeirdAndrew/GentooWSL-FS/releases/latest/download/install.tar.gz
-
-    choco install -y unxutils
-
-    date.bat
-
-    cat stuff.txt
-
-    set /p VERSIONDATE=<stuff.txt
-
-    "C:\Program Files\Git\usr\bin\sed.exe" -i "s/[0-9]\.[0-9]\.[0-9]\.[0-9]/%VERSIONDATE%/g" DistroLauncher-Appx\MyDistro.appxmanifest
-
-    build.bat x64 rel
-
-    mkdir Artifacts
-
-    copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.cer Artifacts
-
-    copy AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_%VERSIONDATE%_Test\*.appxbundle Artifacts
+- cmd: build.bat x64 rel
+- ps: >-
+  mkdir Artifacts
+  copy "AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_${ENV:VERSIONDATE}_Test\*.cer" Artifacts
+  copy "AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_${ENV:VERSIONDATE}_Test\*.appxbundle" Artifacts
+    
 artifacts:
 - path: Artifacts\*.cer
   name: Certificate
 - path: Artifacts\*.appxbundle
   name: Appx
+  
 deploy:
   tag: $(VERSIONDATE)
   description: 'GentooWSL!'
