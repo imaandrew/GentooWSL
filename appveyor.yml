@@ -12,12 +12,12 @@ init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
   - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
-  - cmd: >-
-      echo %pfx_secret% > pfx_secret.txt
-      echo %pfx_salt% > pfx_salt.txt
-      echo %pfx_password% > pfx_password.txt
+  - ps: >-
+      $env:pfx_secret | out-file secret.txt
+      $env:pfx_salt | out-file salt.txt
+      $env:pfx_password | out-file password.txt
   - ps: sleep 200
-  - cmd: appveyor-tools\secure-file -decrypt DistroLauncher-Appx\GentooWSL.pfx.enc -secret %pfx_secret% -salt %pfx_salt%
+  - ps: appveyor-tools\secure-file -decrypt DistroLauncher-Appx\GentooWSL.pfx.enc -secret $env:pfx_secret -salt $env:pfx_salt
   - ps: $password = ConvertTo-SecureString -String $env:pfx_password -Force -AsPlainText 
   - ps: Import-PfxCertificate -FilePath DistroLauncher-Appx\GentooWSL.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $password
   
