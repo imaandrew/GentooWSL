@@ -16,18 +16,18 @@ install:
   
 before_build:
   - ps: >-
-    Invoke-WebRequest https://github.com/ThatWeirdAndrew/GentooWSL-FS/releases/latest/download/install.tar.gz -OutFile x64\install.tar.gz -UseBasicParsing
-    $version='Version="' + $(Get-Date -Format "yy.MM.dd") + '.0"'
-    $env:VERSIONDATE=$(Get-Date -Format "yy.MM.dd") + '.0'
-    $file_contents = $(Get-Content .\DistroLauncher-Appx\MyDistro.appxmanifest) -replace 'Version="1.1.1.1"', $version
-    $file_contents | Out-File "DistroLauncher-Appx\MyDistro.appxmanifest" -Encoding utf8
+      Invoke-WebRequest https://github.com/ThatWeirdAndrew/GentooWSL-FS/releases/latest/download/install.tar.gz -OutFile x64\install.tar.gz -UseBasicParsing
+      $version='Version="' + $(Get-Date -Format "yy.MM.dd") + '.0"'
+      $env:VERSIONDATE=$(Get-Date -Format "yy.MM.dd") + '.0'
+      $file_contents = $(Get-Content .\DistroLauncher-Appx\MyDistro.appxmanifest) -replace 'Version="1.1.1.1"', $version
+      $file_contents | Out-File "DistroLauncher-Appx\MyDistro.appxmanifest" -Encoding utf8
     
 build_script:
 - cmd: build.bat x64 rel
 - ps: >-
-  mkdir Artifacts
-  copy "AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_${ENV:VERSIONDATE}_Test\*.cer" Artifacts
-  copy "AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_${ENV:VERSIONDATE}_Test\*.appxbundle" Artifacts
+    mkdir Artifacts
+    copy "AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_${ENV:VERSIONDATE}_Test\*.cer" Artifacts
+    copy "AppPackages\DistroLauncher-Appx\DistroLauncher-Appx_${ENV:VERSIONDATE}_Test\*.appxbundle" Artifacts
     
 artifacts:
 - path: Artifacts\*.cer
