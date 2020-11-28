@@ -8,7 +8,10 @@ environment:
     secure: KOz+2qEYja2tlD0D6s0+JddJZ7ATx52COlzIhn3/8Ax+UlaCrOOAytXV/UFuiRbkFc3p5DO2bZf5aOLFmcojrQ==
   pfx_password:
     secure: a4UPiwsKmU/zUH6zsReleHzCXG++ZwWimSoHu2xcjTo=
+  my_variable:
+    secure: Eze4m09uFjWbF9X6pA2SCg==
 install:
+  - cmd: echo %my_variable%
   - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
   - cmd: appveyor-tools\secure-file -decrypt DistroLauncher-Appx\GentooWSL.pfx.enc -secret %pfx_secret% -salt %pfx_salt%
   - ps: $password = ConvertTo-SecureString -String $env:pfx_password -Force -AsPlainText 
