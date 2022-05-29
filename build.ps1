@@ -45,17 +45,17 @@ Do {
     elseif (Test-Path "${Env:Programfiles(x86)}\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" -PathType leaf) {
         $MSBUILD="${Env:Programfiles(x86)}\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
     }
-    elseif (Test-Path "${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
-        $MSBUILD="${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe"
+    elseif (Test-Path "${Env:Programfiles}\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
+        $MSBUILD="${Env:Programfiles}\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe"
     }    
-    elseif (Test-Path "${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
-        $MSBUILD="${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe"
+    elseif (Test-Path "${Env:Programfiles}\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
+        $MSBUILD="${Env:Programfiles}\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe"
     }
-    elseif (Test-Path "${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
-        $MSBUILD="${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe"
+    elseif (Test-Path "${Env:Programfiles}\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
+        $MSBUILD="${Env:Programfiles}\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe"
     }    
-    elseif (Test-Path "${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Preview\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
-        $MSBUILD="${Env:Programfiles(x86)}\Microsoft Visual Studio\2022\Community\Preview\Current\Bin\MSBuild.exe"
+    elseif (Test-Path "${Env:Programfiles}\Microsoft Visual Studio\2022\Preview\Msbuild\Current\Bin\MSBuild.exe" -PathType leaf) {
+        $MSBUILD="${Env:Programfiles}\Microsoft Visual Studio\2022\Preview\Current\Bin\MSBuild.exe"
     }
     elseif (Test-Path "${Env:Programfiles(x86)}\MSBuild\14.0\bin") {
         $MSBUILD="${Env:Programfiles(x86)}\MSBuild\14.0\bin\msbuild.exe"
