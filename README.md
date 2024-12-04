@@ -9,4 +9,4 @@ Have you ever wanted to easily run Gentoo on Windows? No? Me neither. Introducin
 - Gentoo
 
 ## Reasons why you should use it
--
+- It will use your free time, so you now have an excuse to leave dinner!
